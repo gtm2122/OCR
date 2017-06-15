@@ -32,7 +32,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
     
     else:
         img = rimg
-    
+    ocr = np.zeros_like(img)
     if (company.lower()=='siemens' and R == 1024 and C == 768):
         coords = np.array([np.arange(469,30,-1),np.arange(30,469)]).T
         for i in coords:
