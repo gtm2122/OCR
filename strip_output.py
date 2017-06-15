@@ -1,3 +1,9 @@
+### Debug code- used to remove every output cell of a jupyter notebook incase the notebook was instructed to print more than 15MB of text
+### which causes it to hang.
+### Usage in terminal:
+### python strip_output.py < overloadednotebook.ipynb > outputless_notebook.ipynb
+
+
 def strip_output(nb):
  for ws in nb.worksheets:
   for cell in ws.cells:

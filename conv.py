@@ -4,6 +4,9 @@ import numpy as np
 
 import skimage.io as io
 def z_pad(img):
+    
+    ### Code to zero pad images to 30 by 30 images
+    
     sz = 30
     p_img = np.zeros((sz,sz))
     #print(img.shape)
@@ -15,6 +18,12 @@ def z_pad(img):
     
 
 import skimage.io as io
+
+### Below code takes in an echo image and based on manufacturer info forms bounding boxes to 
+### separate the text part from the non-text part
+
+### TODO - modify hardcoded bounding box which is dependant on manufacturer info and make it more independant of it
+### this part requires modification regardless as this misses textual info in some images.
 def get_echo(rimg,company,R,C,ocr_flag=0):
     #thresh = to(I)
     if(len(rimg.shape))==3:
@@ -23,64 +32,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
     
     else:
         img = rimg
-    #### img = the image object in grayscale 
-    #### company = company tag in dicom file
-    #### R = height
-    #### C = width
-    #print('hhh')
-    #plt.imshow(img),plt.show()
-    dic_m = {}
     
-    dic_m["'SIEMENS' 1024 768"] = [[30,474],[469,0],[673,0],[673,1024],[469,1023],[30,551]]
-
-    '/data/Gurpreet/Echo/Images/35/Images/TEE_35_24_1.jpg'
-    dic_m["'INFINITT' 967 872"] = [[3,319],[306,21],[398,201],[415,380],[291,613],[3,319]]
-
-    dic_m["'GEMS Ultrasound' 636 422"] = [[0,316],[311,0],[411,186],[421,306],[421,586],[304,629],[0,316]]
-
-    dic_m["'Philips Medical Systems' 800 600"]=[[98,426],[560,6],[568,636],[432,758],[426,98]]
-
-    '/data/Gurpreet/Echo/Images/35/Images/TEE_35_24_1.jpg'
-    dic_m["'Philips Medical Systems' 1024 768"]=[[99,429],[433,100],[600,322],[599]]
-
-    '/data/Gurpreet/Echo/Sorted_Images/A2C/EQo_78_42_1.jpg'
-    dic_m["'GE Vingmed Ultrasound' 636 434"] = [[7,319],[322,13],[401,241],[401,582],[7,577]]
-
-    dic_m["'GEMS Ultrasound' 636 434"] = [[10,320],[320,10],[402,162],[400,600],[124,578],[10,320]]
-
-    dic_m["'NeXus-Community Medical Picture DEPT' 636 436"] = [[10,320],[320,10],[402,162],[400,600],[124,578],[10,320]]
-
-    dic_m["'GE Healthcare Ultrasound' 1016 708"] = [[66,510],[505,84],[650,313],[663,524],[574,985],[60,510]]
-
-    dic_m["'INFINITT' 966 873"] = [[112,482],[554,44],[721,350],[721,908],[480,908],[112,482]]
-
-    dic_m["'TOSHIBA_MEC_US' 960 720"] = [[88,480],[477,100],[619,479],[465,867],[88,480]]
-    ocr = np.zeros_like(img)
-    '''
-    Cannot process --
-
-    'TOSHIBA_MEC' 512 512
-    [["'48'", "'1'"], ["'48'", "'2'"], ["'48'", "'3'"], ["'48'", "'4'"], ["'48'", "'5'"], ["'48'", "'6'"], ["'48'", "'7'"], ["'48'", "'8'"], ["'48'", "'9'"]]
-
-    "INFINITT' 967 832"] = [["'8'", "'46'"], ["'15'", "'59'"], ["'24'", "'76'"], ["'39'", "'39'"], ["'68'", "'24'"], ["'92'", "'34'"]]
-
-    "'INFINITT' 1603 928"] = [["'14'", "'45'"], ["'14'", "'48'"], ["'14'", "'49'"], ["'14'", "'50'"], ["'14'", "'51'"], ["'28'", "'3'"], ["'28'", "'4'"], ["'93'", "'49'"]]
-
-    "'INFINITT' 967 834"] = [[62,455],[526,50],[704,312],[622,950],[525,939],[62,455]]
-
-    'INFINITT' 1024 1024
-    [["'48'", "'10'"]]
-
-    'GEMS Ultrasound' 640 458
-    [["'69'", "'73'"], ["'69'", "'74'"], ["'77'", "'61'"], ["'77'", "'62'"], ["'77'", "'63'"]]
-
-    'GE Vingmed Ultrasound' 640 480
-    [["'73'", "'59'"], ["'73'", "'60'"]]
-
-    'INFINITT' 967 808
-    [["'72'", "'89'"], ["'72'", "'91'"]]
-
-    '''
     if (company.lower()=='siemens' and R == 1024 and C == 768):
         coords = np.array([np.arange(469,30,-1),np.arange(30,469)]).T
         for i in coords:

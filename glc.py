@@ -1,7 +1,10 @@
 from __future__ import print_function
 import numpy as np
 def get_glyphs(world,ek=0):
- 
+    
+ ### Obtains the coordinates of each set of connected pixels 
+ ### Recursive code based on Dyksteris algorithm (look up recursive Fill algorithm)
+ ### May lead to indentation error
  #ek = 0
  all_X = [] 
  
@@ -139,6 +142,9 @@ def get_glyphs(world,ek=0):
  
  return [glyph_box[inds[i]] for i in range(0,inds.shape[0])]
  #return g_temp
+    
+    
+    
 def func(x,y,world,all_X,glyph_coord):
  #print [x,y]
  if([x,y]not in all_X):
