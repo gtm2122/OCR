@@ -12,6 +12,10 @@ from torchvision import datasets,models,transforms
 import torch.optim as optim
 import copy
 
+import skimage.io as io
+from scipy.misc import imsave
+from skimage import img_as_uint
+import errno 
 import numpy as np
 import random
 import gc
@@ -51,6 +55,78 @@ def lr_scheduler(optimizer,epoch,init_lr = 0.001,lr_decay_epoch = 7):
         param_group['lr'] = lr
     return optimizer
 
+def result(val_path,t_model,n='Res'):
+    correct= 0
+    # this function saves the images that were misclassifed 
+    try:
+        os.makedirs('/data/gabriel/OCR/OCR_data/misclas/'+str(n))
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir('/data/gabriel/OCR/OCR_data/misclas/'):
+            pass
+        else:
+            raise
+    dsets,dset_loaders,dset_sizes = load_data(val_path,10)
+    
+    val_load = dset_loaders['val']
+    val_size = dset_sizes['val']
+    val = dsets['val']
+    
+    t_model = t_model.cuda()
+    wrong=0
+    count=0
+    for data in val_load:
+        inp,label = data
+        inputs,label = Variable(inp.cuda()),Variable(label.cuda())
+        
+        count+=1
+       
+        if(inputs.size(0)<10 and  n == 'Inception'):
+            flag=1
+            temp = Variable(torch.zeros((10,3,300,300)).cuda())
+                
+            temp[0:inputs.size(0)]=inputs
+                
+            inputs = temp
+                    
+            temp2 = Variable(torch.LongTensor((10)).cuda())
+            temp2[0:labels.size(0)] = labels
+            temp2[labels.size(0):] = 0
+                    
+            labels = temp2
+        out = t_model(inputs)
+        _,pred = torch.max(out.data,1)
+        
+        l = label.data.cpu().numpy().reshape(10)
+        p = pred.cpu().numpy().T.reshape(10)
+        
+        eq = np.where(~(l==p))[0]
+        #print(l)
+        #print(p)
+        #print(eq)
+        if len(eq)>0:
+            #print(eq)
+            for i in eq:
+                #print(i)
+                #print(inp.numpy().shape)
+                c=inp[i,:,:,:].numpy().transpose((1,2,0))
+                mean=np.array([0.485,0.456,0.406])
+                std = np.array([0.229,0.224,0.225])
+                c= (std*c + mean)#.astype(np.uint32)
+                #plt.imshow(inp),plt.show()
+                #plt.pause(0.01)
+                
+                plt.imshow(c),plt.show()
+                
+                print(p[i])
+                print(l[i])
+                
+                imsave('/data/gabriel/OCR/OCR_data/misclas/'+str(n)+'/'+str(count)+'_'+str(p[i])+'.png',c)
+            correct+=10-len(eq)
+            wrong+=len(eq)
+    print(correct)
+    print(wrong)
+    print(correct/(correct+wrong))
+    print(wrong/(correct+wrong))
 
 def load_data(path,b_size=10):
     
@@ -63,8 +139,8 @@ def load_data(path,b_size=10):
                                               transforms.Normalize([0.485,0.456,0.406],[0.229,0.224,0.225])])
                    ,
                    'val':transforms.Compose([
-                transforms.Scale(350),
-                transforms.RandomCrop(300),
+                transforms.Scale(300),
+                transforms.CenterCrop(300),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485,0.456,0.406],[0.229,0.224,0.225])
         ])
@@ -121,9 +197,9 @@ def train_model(model,optimizer,criterion,lr_scheduler,data_path,batch_size, n_e
                 optimizer.zero_grad()
                 
                 flag=0
-                if(inputs.size(0)<10 and  n == 'Inception'):
+                if(inputs.size(0)<batch_size and  n == 'Inception'):
                     flag=1
-                    temp = Variable(torch.zeros((10,3,300,300)).cuda())
+                    temp = Variable(torch.zeros((batch_size,3,300,300)).cuda())
                     
                     temp[0:inputs.size(0)]=inputs
                     
