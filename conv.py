@@ -27,7 +27,7 @@ import skimage.io as io
 def get_echo(rimg,company,R,C,ocr_flag=0):
     #thresh = to(I)
     if(len(rimg.shape))==3:
-        img = 0.2989*rimg[:,:,0] + 0.587*rimg[:,:,1] + 0.114*rimg[:,:,1]
+        img = 0.2989*rimg[:,:,0] + 0.587*rimg[:,:,1] + 0.114*rimg[:,:,2]
     #binary = I>thresh
     
     else:
@@ -55,7 +55,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         img[:258,755:] = 0
         plt.imshow(img),plt.show()
     
-    elif(company.lower()=='gems ultrasound' and R == 636 and C == 422):
+    if(company.lower()=='gems ultrasound' and R == 636 and C == 422):
         coords = np.array([np.arange(6,316),np.arange(316,6,-1)]).T
         imf = np.fliplr(img)
         for i in coords:
@@ -76,10 +76,10 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         #ekg = ocr[8:173,602:]
         #ocr[8:173,602:] = 0
         
-        ekg[395:,:] = img[395:,:]
+        ekg = img[395:,:]
         img[8:173,602:]=0
         
-    elif(company.lower()=='philips medical systems' and R==800 and C ==600):
+    if(company.lower()=='philips medical systems' and R==800 and C ==600):
         ocr[:130,0:900]=img[:130,0:900]=0
         img[:130,0:900]=0
         
@@ -102,7 +102,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         ekg = img[555:,:]
         img[555:,:] = 0
     
-    elif(company.lower()=='philips medical systems'and R== 1024 and C== 768):
+    if(company.lower()=='philips medical systems'and R== 1024 and C== 768):
         
         
         ocr[:133,:] = img[:133,:]
@@ -122,40 +122,40 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         
    
     
-    elif(company.lower()=='ge vingmed ultrasound' and R == 636  and C == 434):
-        print('hererer')
+    if(company.lower()=='ge vingmed ultrasound' and R == 636  and C == 434):
+        #print('hererer')
         #ocr[:8,:] = img[:8,:]
         #ocr[:8,:] = img[:8,:]
         ocr[:105,:192] = img[:105,:192]
         img[:105,:192] = 0
+        #plt.imshow(img),plt.show()
+        #plt.imshow(img[390:,:]),plt.show()
+        print('here')
         
-        
+        var = img[394:,:]
+        #plt.imshow(var),plt.show()
         ocr[:50,:288] = img[:50,:288]
         img[:50,:288]=0
-        #img[:8,:] = 0
         
+        ekg=var
+        print(ekg)
         
         ocr[0:42,:95] = img[0:42,:95]
         img[0:42,:95]=0
         
-        #ocr[:63,:131] = img[:63,:131]
-        #img[:63,:131] = 0
-        
-        #ocr[:10,:] = img[:10,:]
-        #img[:10,:] = 0
+      
         
         ocr[400:,610:] = img[400:,610:] 
         img[400:,610:] = 0
         
-        #ocr[:207,592:] = img[:207,592:]
-        #img[:207,592:] = 0
         
-        ekg = img[395:,:]
+        img[:,600:] = 0
+        if(ocr_flag==0):
+            img[390:,:] = 0
         #img[393:,:] = 0
         
-    #io.imsave('/data/gabriel/orig116.png',binary)
     
-    elif company.lower()=='gems ultrasound' and R == 636 and C == 434:
+    if company.lower()=='gems ultrasound' and R == 636 and C == 434:
         #ocr[:8,:] = img[:8,:]
         img[:8,:] = 0
         
@@ -170,14 +170,14 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         
         ocr[:207,592:] = img[:207,592:]
         img[:207,592:] = 0
-        
+        ekg = np.zeros((img[395:,:].shape[0],img[395:,:].shape[1]))
         ekg = img[395:,:]
         img[393:,:] = 0
     
     
     
-    elif company.lower()=='ge healthcare ultrasound' and R == 1016 and C == 708 :
-        
+    if company.lower()=='ge healthcare ultrasound' and R == 1016 and C == 708 :
+        print('here2')
         ocr[:148,:259] = img[:148,:259]
         img[:148,:259] = 0
         
@@ -189,7 +189,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
     
         
     
-    elif company.upper()=='TOSHIBA_MEC_US' and R == 960 and C == 720:
+    if company.upper()=='TOSHIBA_MEC_US' and R == 960 and C == 720:
         ekg = img[586:,:]
         img[586:,:] = 0
         
@@ -209,45 +209,13 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         #img=imf
         #img[674:,:997]=0
         
-    #binary = img_as_uint(img)
-    #plt.imshow(img),plt.show()
-    #plt.imshow(ekg),plt.show()
-    plt.imshow(ocr),plt.show()
-    #io.imsave('/data/gabriel/imgtemp.png',img)
     
+    if(company.lower()=='ge vingmed ultrasound' and R == 636  and C == 434 and ocr_flag ==1):
+        plt.imshow(var),plt.show()
+        #img[390:,:] = 0
+        return ocr,var
     if(ocr_flag==0):
         
         return img
     else:
         return ocr,ekg
-# def gt_in_p(r0,c0,r1,c1):
-    
-#     y1 = 422
-#     x1 = 209
-#     y2 = 312
-#     x2 = 2
-    
-#     m = (312.0-422.0)/(2.0-209.0)
-    
-#     arr = []
-    
-#     for x in range(2,210):
-#         arr.append([m*(x-209)+422,x])
-        
-        
-#     #m = 
-# def gt_in_p(r0,c0,r1,c1):
-    
-#     y1 = 422
-#     x1 = 209
-#     y2 = 312
-#     x2 = 2
-    
-#     m = (312.0-422.0)/(2.0-209.0)
-    
-#     arr = []
-    
-#     for x in range(2,210):
-#         arr.append([m*(x-209)+422,x])
-        
-        
