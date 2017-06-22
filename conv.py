@@ -130,7 +130,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         img[:105,:192] = 0
         #plt.imshow(img),plt.show()
         #plt.imshow(img[390:,:]),plt.show()
-        print('here')
+        #print('here')
         
         var = img[394:,:]
         #plt.imshow(var),plt.show()
@@ -138,7 +138,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         img[:50,:288]=0
         
         ekg=var
-        print(ekg)
+        #print(ekg)
         
         ocr[0:42,:95] = img[0:42,:95]
         img[0:42,:95]=0
@@ -211,7 +211,7 @@ def get_echo(rimg,company,R,C,ocr_flag=0):
         
     
     if(company.lower()=='ge vingmed ultrasound' and R == 636  and C == 434 and ocr_flag ==1):
-        plt.imshow(var),plt.show()
+        #plt.imshow(var),plt.show()
         #img[390:,:] = 0
         return ocr,var
     if(ocr_flag==0):
