@@ -1,39 +1,40 @@
 from __future__ import print_function
 import numpy as np
-def get_glyphs(world,ek=0):
+def get_glyphs(World,ek=0):
     
  ### Obtains the coordinates of each set of connected pixels 
  ### Recursive code based on Dyksteris algorithm (look up recursive Fill algorithm)
  ### May lead to indentation error
  #ek = 0
- all_X = [] 
+ All_X = [] 
  
  
  
  glyph_box = []
  dist=[]
- for x in range (0,world.shape[0]):
+ for X in range (0,World.shape[0]):
  
   
-  for y in range(0,world.shape[1]):
+  for Y in range(0,World.shape[1]):
   
-   if(world[x,y]>0 ):
-    all_X.append([x,y])
+   if(World[X,Y]>0 ):
+    All_X.append([X,Y])
  count = 0
  dic= {}
- for x in range(0,world.shape[0]-1):
+ for X in range(0,World.shape[0]-1):
   #flag = 0
-  for y in range(0,world.shape[1]-1):
-   if(world[x,y] >0 and [x,y] in all_X):
+  for Y in range(0,World.shape[1]-1):
+   if(World[X,Y] >0 and [X,Y] in All_X):
     #print tuple([x,y])
-    glyph_coord = []
-    func(x,y,world,all_X,glyph_coord)
+    Glyph_coord = []
+    count=0
+    func(x=X,y=Y,world=World,all_X=All_X,glyph_coord=Glyph_coord,global_count=count)
     #print(glyph_coord)
     #return
     
     
     
-    gl_np = np.array(glyph_coord)
+    gl_np = np.array(Glyph_coord)
     
     
     #glyph_box.append([gl_np[:,0].min(),gl_np[:,1].min(),gl_np[:,0].max(),gl_np[:,1].max()])
@@ -106,6 +107,7 @@ def get_glyphs(world,ek=0):
   #print(distance)
  #return
  '''
+ '''
  g_temp = []
  print(dist.shape)
  row_sort = np.unique(np.sort(dist[:,0])) 
@@ -141,12 +143,17 @@ def get_glyphs(world,ek=0):
  #inds = np.argsort(dist).astype(int)
  
  return [glyph_box[inds[i]] for i in range(0,inds.shape[0])]
+ '''
+ return glyph_box
  #return g_temp
     
     
     
-def func(x,y,world,all_X,glyph_coord):
+def func(x,y,world,all_X,glyph_coord,global_count):
  #print [x,y]
+ global_count+=1
+ if(global_count>180):
+  return
  if([x,y]not in all_X):
   return
  for i in range(0,len(all_X)):
@@ -155,32 +162,33 @@ def func(x,y,world,all_X,glyph_coord):
    glyph_coord.append(all_X[i])
    #print(all_X[i])
    del all_X[i]
+   
    break
  
- if (world[x+1,y] >0 and x+1 < world.shape[0]):
-  func(x+1,y,world,all_X,glyph_coord)
+ if (x+1 < world.shape[0] and world[x+1,y] >0 ):
+  func(x+1,y,world,all_X,glyph_coord,global_count)
   #print 0
- if  (world[x-1,y] >0 and x-1 >= 0):
-  func(x-1,y,world,all_X,glyph_coord)
+ if  (x-1 >= 0 and world[x-1,y] >0 ):
+  func(x-1,y,world,all_X,glyph_coord,global_count)
   #print 1
- if  (world[x,y+1] >0 and y+1 < world.shape[1]):
-  func(x,y+1,world,all_X,glyph_coord)
+ if  (y+1 < world.shape[1] and world[x,y+1] >0 ):
+  func(x,y+1,world,all_X,glyph_coord,global_count)
   #print 2
- if  (world[x,y-1] >0 and y-1 >= 0):
-  func(x,y-1,world,all_X,glyph_coord)
+ if  (y-1 >= 0 and world[x,y-1] >0 ):
+  func(x,y-1,world,all_X,glyph_coord,global_count)
   #print 3
     
- if  (world[x+1,y+1] >0 and x+1 < world.shape[0] and y+1 <world.shape[1]):
-  func(x+1,y+1,world,all_X,glyph_coord)
+ if  (x+1 < world.shape[0] and y+1 <world.shape[1] and world[x+1,y+1] >0 ):
+  func(x+1,y+1,world,all_X,glyph_coord,global_count)
   #print 4
- if  (world[x+1,y-1] >0 and x+1 < world.shape[0] and y-1>=0):
-  func(x+1,y-1,world,all_X,glyph_coord)
+ if  (x+1 < world.shape[0] and y-1>=0 and world[x+1,y-1] >0 ):
+  func(x+1,y-1,world,all_X,glyph_coord,global_count)
   #print 5
- if  (world[x-1,y+1] >0 and x-1 >=0 and y+1< world.shape[1]):
-  func(x-1,y+1,world,all_X,glyph_coord)
+ if  (x-1 >=0 and y+1< world.shape[1] and world[x-1,y+1] >0 ):
+  func(x-1,y+1,world,all_X,glyph_coord,global_count)
   #print 6
- if  (world[x-1,y-1] >0 and x-1>=0 and y-1>=0):
-  func(x-1,y-1,world,all_X,glyph_coord)
+ if  (x-1>=0 and y-1>=0 and world[x-1,y-1] >0 ):
+  func(x-1,y-1,world,all_X,glyph_coord,global_count)
   #print 7  
  
  #main()
