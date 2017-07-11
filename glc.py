@@ -11,7 +11,7 @@ def get_glyphs(World,ek=0):
  
  
  glyph_box = []
- dist=[]
+ #dist=[]
  for X in range (0,World.shape[0]):
  
   
@@ -20,7 +20,7 @@ def get_glyphs(World,ek=0):
    if(World[X,Y]>0 ):
     All_X.append([X,Y])
  count = 0
- dic= {}
+ #dic= {}
  for X in range(0,World.shape[0]-1):
   #flag = 0
   for Y in range(0,World.shape[1]-1):
@@ -48,9 +48,7 @@ def get_glyphs(World,ek=0):
      gl_max_c = gl_np[:,1].max()+1
      
      gl_max_r = gl_np[:,0].max()+1
-     gl_min_r = gl_np[:,0].min()-16#gl_max_r-24
-     
-    #elif(ek==0):
+     gl_min_r = gl_np[:,0].min()-16
      gl_min_c = gl_np[:,1].min()-1
      gl_max_c = gl_np[:,1].max()+1
      
@@ -60,22 +58,22 @@ def get_glyphs(World,ek=0):
      if(gl_min_r>=0 and gl_min_c>=0 and gl_max_r>=0 and gl_max_c>=0):
       glyph_box.append([gl_min_r,gl_min_c,gl_max_r,gl_max_c])
       #dist.append( (gl_min_r+gl_max_r)**2/4 + (gl_min_c+gl_max_c)**2/4 )
-      dist.append( [(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] )
-      if(count not in dic):
-       dic[count] = None
-      dic[count]=[(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] 
+      #dist.append( [(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] ) 
+      #if(count not in dic):
+       #dic[count] = None
+      #dic[count]=[(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] 
       
-      count+=1
+      #count+=1
     
      if(gl_min_r>=0 and gl_min_c>=0 and gl_max_r>=0 and gl_max_c>=0):
       glyph_box.append([gl_min_r,gl_min_c,gl_max_r,gl_max_c])
       #dist.append( (gl_min_r+gl_max_r)**2/4 + (gl_min_c+gl_max_c)**2/4 )
-      dist.append( [(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] )
-      if(count not in dic):
-       dic[count] = None
-      dic[count]=[(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] 
+      #dist.append( [(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] )
+      #if(count not in dic):
+       #dic[count] = None
+      #dic[count]=[(gl_min_r+gl_max_r)/2 , (gl_min_c+gl_max_c)/2] 
 
-      count+=1
+      #count+=1
 
  
     '''   
@@ -92,12 +90,12 @@ def get_glyphs(World,ek=0):
   if(i[2]-i[0]<=6):
     semi.append(i)
     
- '''
+ 
  #print (count)
  dist=np.array(dist)
  
  inds = []
- '''
+ 
  for i in range(0,count-1):
   distance=[]
   for j in range(i+1,count):
