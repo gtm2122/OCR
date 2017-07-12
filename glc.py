@@ -1,3 +1,4 @@
+### recursive path finding may not be the best way"
 from __future__ import print_function
 import numpy as np
 def get_glyphs(World,ek=0):
