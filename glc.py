@@ -179,14 +179,14 @@ def func(x,y,world,all_X,glyph_coord,global_count):
  if  (x+1 < world.shape[0] and y+1 <world.shape[1] and world[x+1,y+1] >0 ):
   func(x+1,y+1,world,all_X,glyph_coord,global_count)
   #print 4
- if  (x+1 < world.shape[0] and y-1>=0 and world[x+1,y-1] >0 ):
-  func(x+1,y-1,world,all_X,glyph_coord,global_count)
+ #if  (x+1 < world.shape[0] and y-1>=0 and world[x+1,y-1] >0 ):
+  #func(x+1,y-1,world,all_X,glyph_coord,global_count)
   #print 5
- if  (x-1 >=0 and y+1< world.shape[1] and world[x-1,y+1] >0 ):
-  func(x-1,y+1,world,all_X,glyph_coord,global_count)
+ #if  (x-1 >=0 and y+1< world.shape[1] and world[x-1,y+1] >0 ):
+  #func(x-1,y+1,world,all_X,glyph_coord,global_count)
   #print 6
- if  (x-1>=0 and y-1>=0 and world[x-1,y-1] >0 ):
-  func(x-1,y-1,world,all_X,glyph_coord,global_count)
+ #if  (x-1>=0 and y-1>=0 and world[x-1,y-1] >0 ):
+  #func(x-1,y-1,world,all_X,glyph_coord,global_count)
   #print 7  
  
  #main()
